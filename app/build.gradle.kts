@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.taskforwebant"
-        minSdk = 24
+        minSdk = 33
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -38,6 +38,7 @@ android {
 
 dependencies {
     ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.room.ktx)
     implementation (libs.gson)
     implementation (libs.retrofit)
