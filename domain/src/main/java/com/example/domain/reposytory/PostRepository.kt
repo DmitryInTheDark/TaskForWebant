@@ -4,6 +4,6 @@ import com.example.domain.models.PostForUser
 
 interface PostRepository {
 
-    fun getNewPosts(): List<PostForUser>
+    fun getNewPosts(page: Int): List<PostForUser>
 
 }

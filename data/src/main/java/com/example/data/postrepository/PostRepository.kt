@@ -2,11 +2,12 @@ package com.example.data.postrepository
 
 import com.example.data.localstorage.localdatasource.LocalDataSource
 import com.example.data.map.toEntity
-import com.example.data.map.topPostForUser
+import com.example.data.map.toPostForUser
 import com.example.data.remotedatasource.remotedatastorage.RemoteDataStorage
-import com.example.data.remotedatasource.model.ApiResponse
-import com.example.data.remotedatasource.model.PostDto
 import com.example.domain.models.PostForUser
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.IOException
 
  private const val PAGE_SIZE = 20
@@ -25,14 +26,14 @@ class PostRepository(
             }
             localDataSource.savePosts(entities)
             val listToUser = entities.map {
-                it.topPostForUser()
+                it.toPostForUser()
             }
             return listToUser
         }catch(e: IOException){
             val firstList = localDataSource.getPostsFromPage(page)
             val secondList = localDataSource.getPostsFromPage(page + 1)
             val finalList = firstList + secondList
-            return finalList.map { it.topPostForUser() }
+            return finalList.map { it.toPostForUser() }
         }
     }
 }

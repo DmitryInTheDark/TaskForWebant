@@ -5,8 +5,8 @@ import com.example.domain.reposytory.PostRepository
 
 class GetPostUseCase(private val postRepository: PostRepository): PostRepository {
 
-    override fun getNewPosts(): List<PostForUser>{
-        return postRepository.getNewPosts()
+    override fun getNewPosts(page: Int): List<PostForUser>{
+        return postRepository.getNewPosts(page)
     }
 
 }
