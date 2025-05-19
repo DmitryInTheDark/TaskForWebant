@@ -21,4 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "TaskForWebant"
 include(":app")
- 
+include(":data")
+include(":domain")
