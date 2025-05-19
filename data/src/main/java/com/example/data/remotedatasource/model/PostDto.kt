@@ -1,6 +1,6 @@
 package com.example.data.remotedatasource.model
 
-data class Post(
+data class PostDto(
     val id: Int,
     val userID: Int,
     val title: String,

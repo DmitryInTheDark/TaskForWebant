@@ -1,4 +1,4 @@
-package com.example.data.remotedatasource.apiresponseimplementation
+package com.example.data.remotedatasource.remotedatastorage
 
 import com.example.data.remotedatasource.apiresponseinterface.ApiResponseInterface
 import retrofit2.Retrofit

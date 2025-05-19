@@ -1,7 +1,6 @@
 package com.example.data.remotedatasource.apiresponseinterface
 
 import com.example.data.remotedatasource.model.ApiResponse
-import com.example.data.remotedatasource.model.Post
 import retrofit2.http.GET
 import retrofit2.http.Query
 
