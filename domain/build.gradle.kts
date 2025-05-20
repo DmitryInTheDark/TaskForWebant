@@ -10,10 +10,13 @@ kotlin {
     compilerOptions {
         jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
     }
-
+tasks.test{
+    useJUnitPlatform()
 }
+}
+
 dependencies{
-    testImplementation(libs.junit)
+    testImplementation(libs.junit.jupiter)
     testImplementation(libs.kotlinx.coroutines.test)
 
     testImplementation(libs.mockito.core)

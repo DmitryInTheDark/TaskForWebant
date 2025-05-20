@@ -1,5 +1,6 @@
 package com.example.taskforwebant
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -21,7 +22,9 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
 
     lateinit private var binding: ActivityMainBinding
+
     lateinit private var adapter: MainRecyclerViewAdapter
+
     private var pageCount = 1
 
     lateinit private var postRepositoryImplementation: PostRepositoryImplementation
@@ -33,7 +36,15 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
+
+        var keepSplash = true
+
+        installSplashScreen().setKeepOnScreenCondition { keepSplash }
+
+        window.decorView.postDelayed({
+            keepSplash = false
+        }, 2500)
+
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -43,7 +54,6 @@ class MainActivity : AppCompatActivity() {
 
         remoteDataStorage = RemoteDataStorage(RetrofitBuilder().api)
         localDataSource = LocalDataSource(postDao)
-
         postRepositoryImplementation = PostRepositoryImplementation(remoteDataStorage, localDataSource)
 
         getPostUseCase = GetPostUseCase(postRepositoryImplementation)
@@ -51,7 +61,6 @@ class MainActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this, MainViewModelFactory(getPostUseCase))[MainViewModel::class.java]
 
         adapter = MainRecyclerViewAdapter()
-
         binding.RCView.layoutManager = LinearLayoutManager(this)
         binding.RCView.adapter = adapter
 
@@ -59,8 +68,6 @@ class MainActivity : AppCompatActivity() {
             adapter.getNewPosts(it)
             pageCount++
         }
-
-
 
         binding.RCView.addOnScrollListener(object: RecyclerView.OnScrollListener(){
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
