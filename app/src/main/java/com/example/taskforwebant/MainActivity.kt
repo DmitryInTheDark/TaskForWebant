@@ -12,6 +12,7 @@ import com.example.data.postrepository.PostRepositoryImplementation
 import com.example.data.remotedatasource.remotedatastorage.RemoteDataStorage
 import com.example.data.remotedatasource.remotedatastorage.RetrofitBuilder
 import com.example.domain.models.PostForUser
+import com.example.domain.usecases.GetPostUseCase
 import com.example.taskforwebant.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -26,6 +27,8 @@ class MainActivity : AppCompatActivity() {
     lateinit private var postRepositoryImplementation: PostRepositoryImplementation
     lateinit private var localDataSource: LocalDataSource
     lateinit private var remoteDataStorage: RemoteDataStorage
+
+    lateinit private var getPostUseCase: GetPostUseCase
 
     private lateinit var viewModel: MainViewModel
 
@@ -43,7 +46,9 @@ class MainActivity : AppCompatActivity() {
 
         postRepositoryImplementation = PostRepositoryImplementation(remoteDataStorage, localDataSource)
 
-        viewModel = ViewModelProvider(this, MainViewModelFactory(postRepositoryImplementation))[MainViewModel::class.java]
+        getPostUseCase = GetPostUseCase(postRepositoryImplementation)
+
+        viewModel = ViewModelProvider(this, MainViewModelFactory(getPostUseCase))[MainViewModel::class.java]
 
         adapter = MainRecyclerViewAdapter()
 
