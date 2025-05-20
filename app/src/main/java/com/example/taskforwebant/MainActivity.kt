@@ -2,18 +2,16 @@ package com.example.taskforwebant
 
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.data.localstorage.localdatasource.LocalDataSource
-import com.example.data.postrepository.PostRepository
+import com.example.data.postrepository.PostRepositoryImplementation
 import com.example.data.remotedatasource.remotedatastorage.RemoteDataStorage
 import com.example.data.remotedatasource.remotedatastorage.RetrofitBuilder
+import com.example.domain.models.PostForUser
 import com.example.taskforwebant.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -23,8 +21,9 @@ class MainActivity : AppCompatActivity() {
 
     lateinit private var binding: ActivityMainBinding
     lateinit private var adapter: MainRecyclerViewAdapter
+    private var pageCount = 1
 
-    lateinit private var postRepository: PostRepository
+    lateinit private var postRepositoryImplementation: PostRepositoryImplementation
     lateinit private var localDataSource: LocalDataSource
     lateinit private var remoteDataStorage: RemoteDataStorage
 
@@ -42,9 +41,9 @@ class MainActivity : AppCompatActivity() {
         remoteDataStorage = RemoteDataStorage(RetrofitBuilder().api)
         localDataSource = LocalDataSource(postDao)
 
-        postRepository = PostRepository(remoteDataStorage, localDataSource)
+        postRepositoryImplementation = PostRepositoryImplementation(remoteDataStorage, localDataSource)
 
-        viewModel = ViewModelProvider(this, MainViewModelFactory(postRepository))[MainViewModel::class.java]
+        viewModel = ViewModelProvider(this, MainViewModelFactory(postRepositoryImplementation))[MainViewModel::class.java]
 
         adapter = MainRecyclerViewAdapter()
 
@@ -53,6 +52,23 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.postForUser.observe(this){
             adapter.getNewPosts(it)
+            pageCount++
         }
+
+
+
+        binding.RCView.addOnScrollListener(object: RecyclerView.OnScrollListener(){
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val itemCount = layoutManager.itemCount
+                val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
+                if(lastVisibleItem >= itemCount -3){
+                    viewModel.loadNewPosts(pageCount)
+                    pageCount++
+                }
+            }
+        })
+
     }
 }

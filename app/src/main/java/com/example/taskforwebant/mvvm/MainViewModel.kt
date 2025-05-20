@@ -1,5 +1,6 @@
 package com.example.taskforwebant
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,7 +16,6 @@ class MainViewModel(
 
     private val _postForUser = MutableLiveData<List<PostForUser>>()
     val postForUser = _postForUser
-
 
     init {
         loadNewPosts(1)
